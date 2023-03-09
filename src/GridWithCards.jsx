@@ -7,12 +7,41 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
+import { CollapsibleCardContent } from './CollapsibleCardContent';
 
 const cardWidth = 480;
 const cardPadding = "10px";
 
 
 const selectedNodeAsCard = function (selectedNode, openMain) {
+
+    const generalMap = new Map();
+    generalMap.set('Feature', selectedNode.feature);
+    generalMap.set('Option', selectedNode.option);
+    generalMap.set('Additional Info', selectedNode.optionComment);
+    generalMap.set('Valid Until', selectedNode.validUntil);
+    generalMap.set('Catalog Page', selectedNode.catalogPage);
+    
+    const pricingMap = new Map();
+    pricingMap.set('Price', selectedNode.price);
+    pricingMap.set('Price Type', selectedNode.priceType);
+    pricingMap.set('Base Unit', selectedNode.priceTypeBasicUnit);
+    pricingMap.set('Depth', selectedNode.priceTypeDepth);
+    pricingMap.set('Width', selectedNode.priceTypeWidth);
+    pricingMap.set('Height', selectedNode.priceTypeHeight);
+
+    const dimensionHeaders = ['Dimension', 'Nominal Value', 'Minimum Size', 'Maximum Size'];
+    const dimensionMap = [];
+    if(selectedNode.shapeParams) {
+        selectedNode.shapeParams.forEach((shapeParam) => {
+            const dims = []
+            dims.push(shapeParam.name);
+            dims.push(shapeParam.nominalValue);
+            dims.push(shapeParam.minSize);
+            dims.push(shapeParam.maxSize);
+            dimensionMap.push(dims);
+        });
+    }   
 
     return (
         <Card key={4} variant="outlined" sx={{ width: cardWidth, margin: 2, padding: cardPadding, backgroundColor: "rgb(245, 245, 245)" }}>
@@ -21,135 +50,9 @@ const selectedNodeAsCard = function (selectedNode, openMain) {
                     <CardHeader title={selectedNode.label} />
                 </div>
             </div>
-            <CardContent>
-                <div style={{ marginBottom: 5 }}>
-                <CardHeader title='General Information' />
-                </div>
-                <CardContent>
-                    <TableContainer component={Paper}>
-                        <Table aria-label="simple table" stickyHeader>
-                            <TableBody>
-                                <TableRow >
-                                    <TableCell component="th" scope="row">
-                                        <Typography><strong>Feature</strong></Typography>
-                                    </TableCell>
-                                    <TableCell align="right">{selectedNode.feature}</TableCell>
-                                </TableRow>
-                                <TableRow >
-                                    <TableCell component="th" scope="row">
-                                        <Typography><strong>Option</strong></Typography>
-                                    </TableCell>
-                                    <TableCell align="right">{selectedNode.option}</TableCell>
-                                </TableRow>
-                                <TableRow >
-                                    <TableCell component="th" scope="row">
-                                        <Typography><strong>Additional Info</strong></Typography>
-                                    </TableCell>
-                                    <TableCell align="right">{selectedNode.optionComment}</TableCell>
-                                </TableRow>
-                                <TableRow >
-                                    <TableCell component="th" scope="row">
-                                        <Typography><strong>Valid Until</strong></Typography>
-                                    </TableCell>
-                                    <TableCell align="right">{selectedNode.validUntil}</TableCell>
-                                </TableRow>
-                                <TableRow >
-                                    <TableCell component="th" scope="row">
-                                        <Typography><strong>Catalog Page</strong></Typography>
-                                    </TableCell>
-                                    <TableCell align="right">{selectedNode.catalogPage}</TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </CardContent>
-            </CardContent>
-            <CardContent>
-                <div style={{ marginBottom: 5 }}>
-                    <CardHeader title='Pricing Information' />
-                </div>
-                <CardContent>
-                    <TableContainer component={Paper}>
-                        <Table aria-label="simple table" stickyHeader>
-                            <TableBody>
-                                <TableRow >
-                                    <TableCell component="th" scope="row">
-                                        <Typography><strong>Price</strong></Typography>
-                                    </TableCell>
-                                    <TableCell align="right">{selectedNode.price}</TableCell>
-                                </TableRow>
-                                <TableRow >
-                                    <TableCell component="th" scope="row">
-                                        <Typography><strong>Price Type</strong></Typography>
-                                    </TableCell>
-                                    <TableCell align="right">{selectedNode.priceType}</TableCell>
-                                </TableRow>
-                                <TableRow >
-                                    <TableCell component="th" scope="row">
-                                        <Typography><strong>Base Unit</strong></Typography>
-                                    </TableCell>
-                                    <TableCell align="right">{selectedNode.priceTypeBasicUnit}</TableCell>
-                                </TableRow>
-                                <TableRow >
-                                    <TableCell component="th" scope="row">
-                                        <Typography><strong>Depth</strong></Typography>
-                                    </TableCell>
-                                    <TableCell align="right">{selectedNode.priceTypeDepth}</TableCell>
-                                </TableRow>
-                                <TableRow >
-                                    <TableCell component="th" scope="row">
-                                        <Typography><strong>Width</strong></Typography>
-                                    </TableCell>
-                                    <TableCell align="right">{selectedNode.priceTypeWidth}</TableCell>
-                                </TableRow>
-                                <TableRow >
-                                    <TableCell component="th" scope="row">
-                                        <Typography><strong>Height</strong></Typography>
-                                    </TableCell>
-                                    <TableCell align="right">{selectedNode.priceTypeHeight}</TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </CardContent>
-            </CardContent>
-            <CardContent>
-                <div style={{ marginBottom: 5 }}>
-                    <CardHeader title='Dimension Information' />
-                </div>
-                <CardContent>
-                    <TableContainer component={Paper}>
-                        <Table aria-label="simple table" stickyHeader>
-                            <TableHead>
-                                <TableCell component="th" scope="row">Dimension</TableCell>
-                                <TableCell align="right">Nominal Value</TableCell>
-                                <TableCell align="right">Minimum Size</TableCell>
-                                <TableCell align="right">Maximum Size</TableCell>
-                            </TableHead>
-                            <TableBody>
-                                <TableRow >
-                                    <TableCell component="th" scope="row">{selectedNode.shapeParams[0].name}</TableCell>
-                                    <TableCell align="right">{selectedNode.shapeParams[0].nominalValue}</TableCell>
-                                    <TableCell align="right">{selectedNode.shapeParams[0].minSize}</TableCell>
-                                    <TableCell align="right">{selectedNode.shapeParams[0].maxSize}</TableCell>
-                                </TableRow>
-                                <TableRow >
-                                    <TableCell component="th" scope="row">{selectedNode.shapeParams[1].name}</TableCell>
-                                    <TableCell align="right">{selectedNode.shapeParams[1].nominalValue}</TableCell>
-                                    <TableCell align="right">{selectedNode.shapeParams[1].minSize}</TableCell>
-                                    <TableCell align="right">{selectedNode.shapeParams[1].maxSize}</TableCell>
-                                </TableRow>
-                                <TableRow >
-                                    <TableCell component="th" scope="row">{selectedNode.shapeParams[2].name}</TableCell>
-                                    <TableCell align="right">{selectedNode.shapeParams[2].nominalValue}</TableCell>
-                                    <TableCell align="right">{selectedNode.shapeParams[2].minSize}</TableCell>
-                                    <TableCell align="right">{selectedNode.shapeParams[2].maxSize}</TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </CardContent>
-            </CardContent>
+            <CollapsibleCardContent title='General Information' content={generalMap} />
+            <CollapsibleCardContent title='Pricing Information' content={pricingMap} />
+            <CollapsibleCardContent title='Dimension Information' content={dimensionMap} headers={dimensionHeaders} />
         </Card>
     )
 };
